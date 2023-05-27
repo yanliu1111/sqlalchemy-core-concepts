@@ -26,4 +26,4 @@ await engine.dispose()
 
 if you set connect is false, you can use `async with` to close the connection automatically.
 
-🈯 If you are interested other SQLAlchemy tutorial I recommended, check my previous [practice](https://github.com/yanliu1111/python-tutorial) practice.
+🈯 If you are interested other SQLAlchemy tutorial I recommended, check my previous [practice](https://github.com/yanliu1111/python-tutorial).
