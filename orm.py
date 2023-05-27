@@ -1,5 +1,5 @@
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
-from sqlalchemy import ForeignKey, Text
+from sqlalchemy import ForeignKey, Text, select
 from typing import List
 import asyncio
 from sqlalchemy.ext.asyncio import (
@@ -56,7 +56,17 @@ async def insert_data(sessionmaker: async_sessionmaker[AsyncSession]):
                 ])
               
               session.commit()
-       
+
+# selecting updated and deleted data
+async def select_update(sessionmaker:async_sessionmaker[AsyncSession]):
+    async with sessionmaker() as session:
+        statement = select(User).where(User.username == 'bob')
+        result = await session.execute(statement)
+        user = result.scalars().one()
+        # user.username = 'bob'
+        await session.delete(user)
+        await session.commit()
+
 # main is the name of the coroutine
 async def async_main():
     
@@ -68,6 +78,9 @@ async def async_main():
     async with engine.begin() as conn:
         # create database
         # await conn.run_sync(Base.metadata.create_all)
-        await insert_data(session)
+        # insert data
+        # await insert_data(session)
+        # select update data
+        await select_update(session)
 
 asyncio.run(async_main())
