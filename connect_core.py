@@ -15,7 +15,7 @@ users_table = Table(
 )
 
 async def async_main():
-    engin = create_async_engine("sqlite+aiomysql:///sample.db", echo=True)
+    engin = create_async_engine("sqlite+aiosqlite:///sample.db", echo=True)
 
     async with engin.begin() as conn:
         # create database
@@ -31,4 +31,13 @@ async def async_main():
         )
     #select data
     async with engin.connect() as conn:
+        statement = select(users_table).where(
+            users_table.c.username == 'spongebob'
+        )
+
+        result = await conn.execute(statement)
+        print(result.all())
+
+    await engin.dispose()
+
 asyncio.run(async_main())
